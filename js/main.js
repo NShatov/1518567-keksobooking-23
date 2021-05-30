@@ -10,9 +10,9 @@ const getRandomInteger = function(min, max) {
 getRandomInteger(2,15);
 
 
-const getRandomFloar = function(min, max, n) {
-  if (min >= 0 && min !== max && n > 0) {
-    return ((Math.random() * (max - min + 1)) + min).toFixed(n);
+const getRandomFloar = function(min, max, num) {
+  if (min >= 0 && min !== max && num > 0) {
+    return ((Math.random() * (max - min + 1)) + min).toFixed(num);
   }
   getException();
 };
