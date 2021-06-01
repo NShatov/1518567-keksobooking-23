@@ -1,20 +1,29 @@
-const getException = () => 'Неверно указан диапазон!';
+const ERROR_MSG = 'Выбран неверный диапазон';
 
 const getRandomInteger = function(min, max) {
-  if (min >= 0 && min !== max) {
+  try {
+    if (min < 0 || max <= min) {
+      throw new Error('Ошибка!');
+    }
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  getException();
+  catch(error) {
+    return ERROR_MSG;
+  }
 };
 
 getRandomInteger(2,15);
 
-
 const getRandomFloar = function(min, max, num) {
-  if (min >= 0 && min !== max && num > 0) {
+  try {
+    if (min < 0 || max <= min || num < 0) {
+      throw new Error('Ошибка!');
+    }
     return ((Math.random() * (max - min + 1)) + min).toFixed(num);
   }
-  getException();
+  catch(error) {
+    return ERROR_MSG;
+  }
 };
 
 getRandomFloar(4,12,3);
