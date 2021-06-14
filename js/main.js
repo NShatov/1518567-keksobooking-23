@@ -31,10 +31,14 @@ const COUNT = 10; //кол-во объектов
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const AVATARS = [];
-
-for (let param = 1; param <= 8; param++) {
-  AVATARS[param] = `img/avatars/user0${param}.png`;
+let str = '0';
+for (let param = 1; param <= COUNT; param++) {
+  if (param >= 10) {
+    str = '';
+  }
+  AVATARS[param-1] = `img/avatars/user${str}${param}.png`;
 }
+
 //offer
 const TITLE = 'Добро пожаловать!'; //заголовок предложения
 const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel']; //тип жилья
@@ -46,22 +50,42 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const createData = () => ({
-  avatar: getRandomArrayElement(AVATARS),
-  title: TITLE,
-  address: '23, 45',
-  price: getRandomInteger(1, 1000),
-  type: getRandomArrayElement(TYPE),
-  rooms: getRandomInteger(1, 100),
-  guests: getRandomInteger(1, 10),
-  checkin: getRandomArrayElement(CHECKIN),
-  checkout: getRandomArrayElement(CHECKOUT),
-  features: getRandomArrayElement(FEATURES),
-  description: DESCRIPTION,
-  photos: getRandomArrayElement(PHOTOS),
-  lat: getRandomFloat(35.65000,35.70000,5),
-  lng: getRandomFloat(139.70000,139.80000,5),
-});
+const INT_MIN = 1;
+const INT_MAX = 1000;
+const LAT_FLT_MIN = 35.65000;
+const LAT_FLT_MAX = 35.70000;
+const LNG_FLT_MIN = 139.70000;
+const LNG_FLT_MAX = 139.80000;
+const DIGIT = 5;
+
+const loc = {
+  lat: 0,
+  lng: 0,
+};
+
+const createData = function () {
+  loc.lat = getRandomFloat(LAT_FLT_MIN,LAT_FLT_MAX,DIGIT);
+  loc.lng = getRandomFloat(LNG_FLT_MIN,LNG_FLT_MAX,DIGIT);
+
+  return {
+    author: {
+      avatar: getRandomArrayElement(AVATARS),
+    },
+    offer: {
+      title: TITLE,
+      address: Object.values(loc).join(', '),
+      price: getRandomInteger(INT_MIN, INT_MAX),
+      type: getRandomArrayElement(TYPE),
+      rooms: getRandomInteger(INT_MIN, INT_MAX),
+      guests: getRandomInteger(INT_MIN, INT_MAX),
+      checkin: getRandomArrayElement(CHECKIN),
+      checkout: getRandomArrayElement(CHECKOUT),
+      features: getRandomArrayElement(FEATURES),
+      description: DESCRIPTION,
+      photos: getRandomArrayElement(PHOTOS),
+    },
+  };
+};
 
 const similarData = new Array(COUNT).fill(null).map(() => createData());
 similarData;
