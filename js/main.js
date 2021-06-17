@@ -1,28 +1,5 @@
-const ERROR_MSG = 'Выбран неверный диапазон';
-
-const getRandomInteger = function(min, max) {
-  try {
-    if (min < 0 || max <= min) {
-      throw new Error('Ошибка!');
-    }
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  catch(error) {
-    return ERROR_MSG;
-  }
-};
-
-const getRandomFloat = function(min, max, num) {
-  try {
-    if (min < 0 || max <= min || num < 0) {
-      throw new Error('Ошибка!');
-    }
-    return ((Math.random() * (max - min)) + min).toFixed(num);
-  }
-  catch(error) {
-    return ERROR_MSG;
-  }
-};
+import {getRandomInteger} from './get-random.js';
+import {getRandomFloat} from './get-random.js';
 
 //Создаём массив из 10-ти сгенерированных объектов
 
@@ -58,14 +35,12 @@ const createData = function (number) {
   loc.lat = getRandomFloat(LAT_FLT_MIN,LAT_FLT_MAX,DIGIT);
   loc.lng = getRandomFloat(LNG_FLT_MIN,LNG_FLT_MAX,DIGIT);
 
-  let str = '0';
-  if (number >= 9) {
-    str = '';
-  }
+  const str = (number >= 9) ? '' : '0';
+  const param = str + (number + 1);
 
   return {
     'author': {
-      'avatar':`img/avatars/user${str}${number+1}.png`,
+      'avatar':`img/avatars/user${param}.png`,
     },
     'offer': {
       'title': TITLE,
@@ -84,4 +59,4 @@ const createData = function (number) {
 };
 
 const similarData = new Array(COUNT).fill(null).map((it, number) => createData(number));
-similarData;
+console.log(similarData);
