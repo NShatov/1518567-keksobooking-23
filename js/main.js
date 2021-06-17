@@ -30,15 +30,6 @@ const COUNT = 10; //кол-во объектов
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const AVATARS = [];
-let str = '0';
-for (let param = 1; param <= COUNT; param++) {
-  if (param >= 10) {
-    str = '';
-  }
-  AVATARS[param-1] = `img/avatars/user${str}${param}.png`;
-}
-
 //offer
 const TITLE = 'Добро пожаловать!'; //заголовок предложения
 const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel']; //тип жилья
@@ -63,29 +54,34 @@ const loc = {
   lng: 0,
 };
 
-const createData = function () {
+const createData = function (number) {
   loc.lat = getRandomFloat(LAT_FLT_MIN,LAT_FLT_MAX,DIGIT);
   loc.lng = getRandomFloat(LNG_FLT_MIN,LNG_FLT_MAX,DIGIT);
 
+  let str = '0';
+  if (number >= 9) {
+    str = '';
+  }
+
   return {
-    author: {
-      avatar: getRandomArrayElement(AVATARS),
+    'author': {
+      'avatar':`img/avatars/user${str}${number+1}.png`,
     },
-    offer: {
-      title: TITLE,
-      address: Object.values(loc).join(', '),
-      price: getRandomInteger(INT_MIN, INT_MAX),
-      type: getRandomArrayElement(TYPE),
-      rooms: getRandomInteger(INT_MIN, INT_MAX),
-      guests: getRandomInteger(INT_MIN, INT_MAX),
-      checkin: getRandomArrayElement(CHECKIN),
-      checkout: getRandomArrayElement(CHECKOUT),
-      features: getRandomArrayElement(FEATURES),
-      description: DESCRIPTION,
-      photos: getRandomArrayElement(PHOTOS),
+    'offer': {
+      'title': TITLE,
+      'address': Object.values(loc).join(', '),
+      'price': getRandomInteger(INT_MIN, INT_MAX),
+      'type': getRandomArrayElement(TYPE),
+      'rooms': getRandomInteger(INT_MIN, INT_MAX),
+      'guests': getRandomInteger(INT_MIN, INT_MAX),
+      'checkin': getRandomArrayElement(CHECKIN),
+      'checkout': getRandomArrayElement(CHECKOUT),
+      'features': getRandomArrayElement(FEATURES),
+      'description': DESCRIPTION,
+      'photos': getRandomArrayElement(PHOTOS),
     },
   };
 };
 
-const similarData = new Array(COUNT).fill(null).map(() => createData());
+const similarData = new Array(COUNT).fill(null).map((it, number) => createData(number));
 similarData;
