@@ -84,4 +84,4 @@ const createData = function (number) {
 };
 
 const similarData = new Array(COUNT).fill(null).map((it, number) => createData(number));
-similarData;
+console.log(similarData);
