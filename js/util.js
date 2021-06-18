@@ -24,5 +24,11 @@ const getRandomFloat = function(min, max, num) {
   }
 };
 
-export{getRandomInteger};
-export{getRandomFloat};
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+
+export{
+  getRandomInteger,
+  getRandomFloat,
+  getRandomArrayElement
+};
+
