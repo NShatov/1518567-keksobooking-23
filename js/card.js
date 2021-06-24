@@ -1,5 +1,5 @@
-//импортируем массив с объектами
-import {similarData} from './object.js';
+import {similarData} from './object.js'; // импортируем массив с объектами
+import {getInsertData} from './util.js'; // импортируем ф-ию для отрисовки данных в карточку
 
 // найдем блок в который нужно отрисовать первый элемент #map-canvas
 const mapCanvas = document.querySelector('#map-canvas');
@@ -18,6 +18,7 @@ const housingType = {
 
 // создадим фрагмент
 const cardFragment = document.createDocumentFragment();
+
 // проходим по массиву и записываем данные из массива в шаблон
 similarData.forEach(({offer, author}) => {
   const cardPopup = cardPopupTemplate.cloneNode(true);
@@ -27,7 +28,7 @@ similarData.forEach(({offer, author}) => {
   cardPopup.querySelector('.popup__type').textContent = housingType[offer.type];
   cardPopup.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
   cardPopup.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  cardPopup.querySelector('.popup__features').textContent = offer.features;
+  cardPopup.querySelector('.popup__features').textContent;
   cardPopup.querySelector('.popup__description').textContent = offer.description;
   cardPopup.querySelector('.popup__photo').src = offer.photos;
   cardPopup.querySelector('.popup__avatar').src = author.avatar;
@@ -35,4 +36,4 @@ similarData.forEach(({offer, author}) => {
   cardFragment.appendChild(cardPopup);
 });
 
-mapCanvas.appendChild(cardFragment);
+getInsertData(mapCanvas, cardFragment);

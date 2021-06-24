@@ -1,7 +1,8 @@
 import {
   getRandomInteger,
   getRandomFloat,
-  getRandomArrayElement
+  getRandomArrayElement,
+  randomArrayValues
 } from './util.js';
 
 import {
@@ -44,9 +45,9 @@ const createData = function (number) {
       'guests': getRandomInteger(INT_MIN, INT_MAX),
       'checkin': getRandomArrayElement(CHECKIN),
       'checkout': getRandomArrayElement(CHECKOUT),
-      'features': getRandomArrayElement(FEATURES),
+      'features': randomArrayValues(getRandomInteger(1, FEATURES.length - 1), FEATURES),
       'description': DESCRIPTION,
-      'photos': getRandomArrayElement(PHOTOS),
+      'photos': randomArrayValues(getRandomInteger(1, PHOTOS.length - 1), PHOTOS),
     },
   };
 };
