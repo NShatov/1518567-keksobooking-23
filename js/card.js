@@ -19,21 +19,42 @@ const housingType = {
 // создадим фрагмент
 const cardFragment = document.createDocumentFragment();
 
-// проходим по массиву и записываем данные из массива в шаблон
-similarData.forEach(({offer, author}) => {
-  const cardPopup = cardPopupTemplate.cloneNode(true);
-  cardPopup.querySelector('.popup__title').textContent = offer.title;
-  cardPopup.querySelector('.popup__text--address').textContent = offer.address;
-  cardPopup.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  cardPopup.querySelector('.popup__type').textContent = housingType[offer.type];
-  cardPopup.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
-  cardPopup.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  cardPopup.querySelector('.popup__features').textContent;
-  cardPopup.querySelector('.popup__description').textContent = offer.description;
-  cardPopup.querySelector('.popup__photo').src = offer.photos;
-  cardPopup.querySelector('.popup__avatar').src = author.avatar;
+// через деструктуризацию записываем данные из массива в шаблон
+const {offer, author} = similarData[2]; // выведем 2-ой элемент массива
+const cardPopup = cardPopupTemplate.cloneNode(true);
+cardPopup.querySelector('.popup__avatar').src = author.avatar;
+cardPopup.querySelector('.popup__title').textContent = offer.title;
+cardPopup.querySelector('.popup__text--address').textContent = offer.address;
+cardPopup.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+cardPopup.querySelector('.popup__description').textContent = offer.description;
+cardPopup.querySelector('.popup__type').textContent = housingType[offer.type];
+cardPopup.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+cardPopup.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
-  cardFragment.appendChild(cardPopup);
+// найдем элементы списка с фичами
+const featureElement = cardPopup.querySelectorAll('.popup__feature');
+
+// отобразим только те фичи, которые есть в массиве features объекта offer
+const modifiers = (offer.features).map((feature) => `popup__feature--${feature}`);
+
+featureElement.forEach((item) => {
+  const modifier = item.classList[1];
+
+  if (!modifiers.includes(modifier)) {
+    item.remove(); // удаляем фичи, которых нет в массиве
+  }
 });
+
+//добавляем фотографии
+const photoListElement = cardPopup.querySelector('.popup__photos');
+const photoTemplate = photoListElement.querySelector('.popup__photo');
+
+offer.photos.forEach((address) => {
+  const photo = photoTemplate.cloneNode(true);
+  photo.src = address;
+  photoListElement.insertAdjacentElement('beforeend', photo);
+});
+
+cardFragment.appendChild(cardPopup);
 
 getInsertData(mapCanvas, cardFragment);
