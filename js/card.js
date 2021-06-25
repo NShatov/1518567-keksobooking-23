@@ -47,12 +47,10 @@ featureElement.forEach((item) => {
 
 //добавляем фотографии
 const photoListElement = cardPopup.querySelector('.popup__photos');
-const photoTemplate = photoListElement.querySelector('.popup__photo');
+photoListElement.querySelector('.popup__photo').remove();
 
 offer.photos.forEach((address) => {
-  const photo = photoTemplate.cloneNode(true);
-  photo.src = address;
-  photoListElement.insertAdjacentElement('beforeend', photo);
+  photoListElement.insertAdjacentHTML('beforeend', `<img src="${address}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
 });
 
 cardFragment.appendChild(cardPopup);
