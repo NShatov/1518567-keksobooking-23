@@ -45,9 +45,9 @@ const createData = function (number) {
       'guests': getRandomInteger(INT_MIN, INT_MAX),
       'checkin': getRandomArrayElement(CHECKIN),
       'checkout': getRandomArrayElement(CHECKOUT),
-      'features': randomArrayValues(getRandomInteger(1, FEATURES.length - 1), FEATURES),
+      'features': randomArrayValues(getRandomInteger(1, FEATURES.length), FEATURES),
       'description': DESCRIPTION,
-      'photos': randomArrayValues(getRandomInteger(1, PHOTOS.length - 1), PHOTOS),
+      'photos': randomArrayValues(getRandomInteger(1, PHOTOS.length), PHOTOS),
     },
   };
 };
