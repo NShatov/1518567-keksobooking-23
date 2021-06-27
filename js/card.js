@@ -18,10 +18,7 @@ const housingType = {
 
 const cardFragment = document.createDocumentFragment(); // создадим фрагмент
 
-// через деструктуризацию записываем данные из массива в шаблон
-const {offer, author} = similarData[2]; // выведем 2-ой элемент массива
-
-const getCreateCard = () => {
+const getCreateCard = ({offer, author}) => {
   const cardPopup = cardPopupTemplate.cloneNode(true); // клонируем шаблон в переменную
 
   // запишем в переменные блоки шаблона чтобы удобнее было с ними работать
@@ -84,5 +81,5 @@ const getCreateCard = () => {
   getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
 };
 
-getCreateCard();
+getCreateCard(similarData[8]);
 
