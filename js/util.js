@@ -26,9 +26,25 @@ const getRandomFloat = function(min, max, num) {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+const randomArrayValues = (lengthArray, array) => {
+  const newArray = [];
+  while (newArray.length < lengthArray) {
+    const arrayIndex = getRandomInteger(0, array.length - 1);
+    if (newArray.includes(array[arrayIndex]) === false) {
+      newArray.push(array[arrayIndex]);
+    }
+  }
+  return newArray;
+};
+
+//функция для отрисовки данных в карточку
+const getInsertData = (block, fragment) => block.appendChild(fragment);
+
 export{
   getRandomInteger,
   getRandomFloat,
-  getRandomArrayElement
+  getRandomArrayElement,
+  randomArrayValues,
+  getInsertData
 };
 
