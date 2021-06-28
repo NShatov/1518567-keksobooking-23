@@ -10,31 +10,21 @@ const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найд�
 
 // создадим функцию для перевода страницы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
+  //добавим атрибут disabled через перебор
+  formFieldsets.forEach((item) => {
+    item.disabled = inactive;
+  });
+  // пепеберем коллекцию и установим атрибут diabled на элементы
+  mapFiltersSelects.forEach((item) => {
+    item.disabled = inactive;
+  });
+  mapFeatures.disabled = inactive; // установим атрибут disabled на блоке с кнопками-фичами
   if (inactive === true) {
     form.classList.add('ad-form--disabled');
-
-    //добавим атрибут disabled через перебор
-    formFieldsets.forEach((item) => {
-      item.disabled = true;
-    });
     mapFiltersForm.classList.add('map__filters--disabled'); // повесим класс блокировки
-    // пепеберем коллекцию и установим атрибут diabled на элементы
-    mapFiltersSelects.forEach((item) => {
-      item.disabled = true;
-    });
-    mapFeatures.disabled = true; // установим атрибут disabled на блоке с кнопками-фичами
-
   } else {
     form.classList.remove('ad-form--disabled');
-    formFieldsets.forEach((item) => {
-      item.disabled = false;
-    });
     mapFiltersForm.classList.remove('map__filters--disabled');
-    mapFiltersSelects.forEach((item) => {
-      item.disabled = false;
-    });
-    mapFeatures.disabled = false;
   }
 };
-
-getInactiveForm(true);
+getInactiveForm(false);
