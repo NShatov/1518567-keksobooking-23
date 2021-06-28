@@ -19,7 +19,7 @@ const getInactiveForm = (inactive) => {
     item.disabled = inactive;
   });
   mapFeatures.disabled = inactive; // установим атрибут disabled на блоке с кнопками-фичами
-  if (inactive === true) {
+  if (inactive) {
     form.classList.add('ad-form--disabled');
     mapFiltersForm.classList.add('map__filters--disabled'); // повесим класс блокировки
   } else {
@@ -27,4 +27,7 @@ const getInactiveForm = (inactive) => {
     mapFiltersForm.classList.remove('map__filters--disabled');
   }
 };
+
 getInactiveForm(false);
+
+export {getInactiveForm};
