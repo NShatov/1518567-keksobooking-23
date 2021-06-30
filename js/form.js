@@ -82,26 +82,32 @@ formPrice.addEventListener('invalid', () => {
   }
 });
 
-console.log(formRooms);
-console.log(formRooms.options[0].text);
-console.log(formCapacity.options[2].text);
+const selectedValueRoom = formRooms.options.selectedIndex;
+formRooms.options[selectedValueRoom].defaultSelected = true;
+const selectedValueCapacity = formCapacity.options.selectedIndex;
+formCapacity.options[selectedValueCapacity].defaultSelected = false;
 
-const getValueForm = () => {
-  const selectedValueRoom = formRooms.options.selectedIndex;
-  const selectedValueCapacity = formCapacity.options.selectedIndex;
+formCapacity.options[2].defaultSelected = true;
+formCapacity.options[0].disabled = true;
+formCapacity.options[1].disabled = true;
+formCapacity.options[3].disabled = true;
 
-  if (formRooms.options[0].selected = true) {
-    formCapacity.options[0].hidden = true;
-    formCapacity.options[1].hidden = true;
-    formCapacity.options[3].hidden = true;
+/*if (formRooms.options[0].selected) {
+  formCapacity.options[2].selected = true;
+  formCapacity.options[0].disabled = true;
+} else if (formRooms.options[1].selected) {
+  formCapacity.options[1].selected = true;
+  formCapacity.options[2].selected = true;
+  formCapacity.options[0].disabled = true;
+}*/
+
+formRooms.addEventListener('change', () => {
+  if (formRooms.options[1].selected) {
     formCapacity.options[2].selected = true;
-  } else if (formRooms.options[1].selected = true) {
-    formCapacity.options[0].hidden = true;
-    formCapacity.options[3].hidden = true;
-    formCapacity.options[2].selected = true;
+    formCapacity.options[1].disabled = false;
+    formCapacity.options[0].disabled = true;
+    formCapacity.options[3].disabled = true;
   }
-};
-
-getValueForm();
+});
 
 export {getInactiveForm};
