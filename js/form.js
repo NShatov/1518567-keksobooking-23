@@ -33,8 +33,8 @@ getInactiveForm(false);
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
 const formPrice = form.querySelector('#price'); // поле с ценой
-const formRooms = form.querySelector('#room_number'); // поле с комнатами
-const formCapacity = form.querySelector('#capacity'); // поле с гостями
+// const formRooms = form.querySelector('#room_number'); // поле с комнатами
+// const formCapacity = form.querySelector('#capacity'); // поле с гостями
 
 // зададим максимальные и минимальные значения полей формы
 // const MIN_TITLE_LENGTH = 30;
@@ -56,6 +56,7 @@ const formCapacity = form.querySelector('#capacity'); // поле с гостя�
   formTitle.reportValidity();
 });*/
 
+// проверка поля с заголовком
 formTitle.addEventListener('invalid', () => {
   if (formTitle.validity.valueMissing) {
     formTitle.setCustomValidity('Братан! Напиши пару строк от души!');
@@ -67,7 +68,6 @@ formTitle.addEventListener('invalid', () => {
     formTitle.setCustomValidity('');
   }
 });
-
 
 // будем проверять поле с ценой после нажатия кнопки "Опубликовать"
 formPrice.addEventListener('invalid', () => {
@@ -82,32 +82,90 @@ formPrice.addEventListener('invalid', () => {
   }
 });
 
-const selectedValueRoom = formRooms.options.selectedIndex;
-formRooms.options[selectedValueRoom].defaultSelected = true;
+/*const selectedValueRoom = formRooms.options.selectedIndex; // поилучение индекса, выбранного значения
+formRooms.options[selectedValueRoom].defaultSelected = true; // снятие выбранного значения по умолчанию
 const selectedValueCapacity = formCapacity.options.selectedIndex;
-formCapacity.options[selectedValueCapacity].defaultSelected = false;
+formCapacity.options[selectedValueCapacity].defaultSelected = false;*/
 
-formCapacity.options[2].defaultSelected = true;
-formCapacity.options[0].disabled = true;
-formCapacity.options[1].disabled = true;
-formCapacity.options[3].disabled = true;
+/*formCapacity.options[2].defaultSelected = true;
+formCapacity.options[0].hidden = true;
+formCapacity.options[1].hidden = true;
+formCapacity.options[3].hidden = true;*/
 
-/*if (formRooms.options[0].selected) {
-  formCapacity.options[2].selected = true;
-  formCapacity.options[0].disabled = true;
-} else if (formRooms.options[1].selected) {
-  formCapacity.options[1].selected = true;
-  formCapacity.options[2].selected = true;
-  formCapacity.options[0].disabled = true;
-}*/
-
-formRooms.addEventListener('change', () => {
+/*formRooms.addEventListener('change', () => {
+  formRooms.options[0].defaultSelected = false;
   if (formRooms.options[1].selected) {
+    formRooms.options[1].defaultSelected = true;
     formCapacity.options[2].selected = true;
-    formCapacity.options[1].disabled = false;
-    formCapacity.options[0].disabled = true;
-    formCapacity.options[3].disabled = true;
+    formCapacity.options[1].hidden = false;
+  } else if (formRooms.options[2].selected) {
+    formRooms.options[1].defaultSelected = false;
+    formRooms.options[2].defaultSelected = true;
+    formCapacity.options[2].selected = true;
+    formCapacity.options[0].hidden = false;
+    formCapacity.options[1].hidden = false;
+  } else if (formRooms.options[3].selected) {
+    formRooms.options.forEach((item) => {
+      item.defaultSelected = false;
+    });
+    formRooms.options[3].defaultSelected = true;
+    formCapacity.options[0].hidden = true;
+    formCapacity.options[1].hidden = true;
+    formCapacity.options[2].hidden = true;
+    formCapacity.options[3].hidden = false;
   }
-});
+});*/
+
+// напишем функцию сопастовления данных из одного селекта в другой
+
+/*const getMatchingSelect = function (select1, select2) {
+  const matchSelect = {
+    1: ['для 1 гостя'],
+    2: ['для 1 гостя', 'для 2 гостей'],
+    3: ['для 1 гостя', 'для 2 гостей', 'для 3 гостей'],
+    100: ['не для гостей'],
+  };
+
+  const value = +select1.value; // получаем значение в 1-м селекте
+  const options = select2.options; // получаем массив со значениями из 2-го селекта
+  const optionsLength = options.length; // запишем длину массива в переменную
+  const availableOptions = matchSelect[value]; // запишем значение с выбранным значением option
+
+  for (let index = 0; index < optionsLength; index++) {
+    if (availableOptions.indexOf(+options[index].value) !== -1) {
+      options[index].hidden = false;
+    } if (+options[index].value === value && availableOptions.length === 1) {
+      options[index].selected = true;
+    } else {
+      options[index].hidden = true;
+    }
+  }
+
+};*/
+
+/*formRooms.addEventListener('onchange', getMatchingSelect(formRooms, formCapacity));*/
+
+const getById = (id) => form.querySelector(id);
+
+const disableItems = (element, from, to) => {
+  for (let index = from; index < to; index++) {
+    getById(element)[index].disabled = true;
+  }
+};
+
+const enableAll = (element) => {
+  const item = getById(element);
+  for (let index = 0; index < item.length; index++) {
+    item[index].disabled = false;
+  }
+};
+
+const changeDynamicly = () => {
+  const selectIndex = getById('#capacity').selectedIndex;
+  enableAll('#capacity');
+  disableItems('#capacity', selectIndex+1, getById('#capacity').length);
+};
+
+getById('#room_number').addEventListener('change', changeDynamicly);
 
 export {getInactiveForm};
