@@ -36,6 +36,7 @@ const formPrice = form.querySelector('#price'); // поле с ценой
 const formRooms = form.querySelector('#room_number'); // поле с комнатами
 const formCapacity = form.querySelector('#capacity'); // поле с гостями
 
+
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -97,91 +98,35 @@ formPrice.addEventListener('input', () => {
   }
   formPrice.reportValidity();
 });
-
-/*const selectedValueRoom = formRooms.options.selectedIndex; // поилучение индекса, выбранного значения
-formRooms.options[selectedValueRoom].defaultSelected = true; // снятие выбранного значения по умолчанию
-const selectedValueCapacity = formCapacity.options.selectedIndex;
-formCapacity.options[selectedValueCapacity].defaultSelected = false;*/
-
-/*formCapacity.options[2].defaultSelected = true;
-formCapacity.options[0].hidden = true;
-formCapacity.options[1].hidden = true;
-formCapacity.options[3].hidden = true;*/
-
-/*formRooms.addEventListener('change', () => {
-  formRooms.options[0].defaultSelected = false;
-  if (formRooms.options[1].selected) {
-    formRooms.options[1].defaultSelected = true;
-    formCapacity.options[2].selected = true;
-    formCapacity.options[1].hidden = false;
-  } else if (formRooms.options[2].selected) {
-    formRooms.options[1].defaultSelected = false;
-    formRooms.options[2].defaultSelected = true;
-    formCapacity.options[2].selected = true;
-    formCapacity.options[0].hidden = false;
-    formCapacity.options[1].hidden = false;
-  } else if (formRooms.options[3].selected) {
-    formRooms.options.forEach((item) => {
-      item.defaultSelected = false;
-    });
-    formRooms.options[3].defaultSelected = true;
-    formCapacity.options[0].hidden = true;
-    formCapacity.options[1].hidden = true;
-    formCapacity.options[2].hidden = true;
-    formCapacity.options[3].hidden = false;
-  }
-});*/
-
+// сопоставление данных из полей Кол-во комнат и кол-во мест
+const optionsPriceMapping = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
 // напишем функцию сопастовления данных из одного селекта в другой
+function getMatchingSelect(select1, select2, mapping) {
 
-const getMatchingSelect = function (select1, select2) {
-  const matchSelect = {
-    1: ['для 1 гостя'],
-    2: ['для 1 гостя', 'для 2 гостей'],
-    3: ['для 1 гостя', 'для 2 гостей', 'для 3 гостей'],
-    100: ['не для гостей'],
-  };
+  return () => {
+    const value = +select1.value;
+    const options = select2.options;
+    const optionsLength = options.length;
+    const availableOptions = mapping[value];
 
-  const value = +select1.value; // получаем значение в 1-м селекте
-  const options = select2.options; // получаем массив со значениями из 2-го селекта
-  const optionsLength = options.length; // запишем длину массива в переменную
-  const availableOptions = matchSelect[value]; // запишем значение с выбранным значением option
-
-  for (let index = 0; index < optionsLength; index++) {
-    if (availableOptions.indexOf(+options[index].value) !== -1) {
-      options[index].hidden = false;
-    } if (+options[index].value === value && availableOptions.length === 1) {
-      options[index].selected = true;
-    } else {
-      options[index].hidden = true;
+    for (let index = 0; index < optionsLength; index++) {
+      if (availableOptions.indexOf(+options[index].value) !== -1) {
+        options[index].disabled = false;
+        if (+options[index].value === value || availableOptions.length === 1) {
+          options[index].selected = true;
+        }
+      } else {
+        options[index].disabled = true;
+      }
     }
-  }
+  };
+}
 
-};
+formRooms.addEventListener('change', getMatchingSelect(formRooms, formCapacity, optionsPriceMapping));
 
-formRooms.addEventListener('onchange', getMatchingSelect(formRooms, formCapacity));
-
-/*const getById = (id) => form.querySelector(id);
-
-const disableItems = (element, from, to) => {
-  for (let index = from; index < to; index++) {
-    getById(element)[index].disabled = true;
-  }
-};
-
-const enableAll = (element) => {
-  const item = getById(element);
-  for (let index = 0; index < item.length; index++) {
-    item[index].disabled = false;
-  }
-};
-
-const changeDynamicly = () => {
-  const selectIndex = getById('#capacity').selectedIndex;
-  enableAll('#capacity');
-  disableItems('#capacity', selectIndex+1, getById('#capacity').length);
-};
-
-getById('#room_number').addEventListener('change', changeDynamicly);
-
-export {getInactiveForm};*/
+export {getInactiveForm};
