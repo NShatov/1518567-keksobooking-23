@@ -35,7 +35,9 @@ const formTitle = form.querySelector('#title'); // заголовок формы
 const formPrice = form.querySelector('#price'); // поле с ценой
 const formRooms = form.querySelector('#room_number'); // поле с комнатами
 const formCapacity = form.querySelector('#capacity'); // поле с гостями
-
+const formHouseType = form.querySelector('#type');
+const formTimeIn = form.querySelector('#timein');
+const formTimeOut = form.querySelector('#timeout');
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -77,9 +79,9 @@ formPrice.addEventListener('invalid', () => {
   if (formPrice.validity.valueMissing) {
     formPrice.setCustomValidity('Пользователь! Нужно ввести значение в поле');
   } else if (formPrice.validity.rangeUnderflow) {
-    formPrice.setCustomValidity(`Пользователь! Цена должна быть выше ${MIN_PRICE}`);
+    formPrice.setCustomValidity(`Пользователь! Цена должна быть выше ${formPrice.min}`);
   } else if (formPrice.validity.rangeOverflow) {
-    formPrice.setCustomValidity(`Пользователь! Цена не должна быть выше ${MAX_PRICE}`);
+    formPrice.setCustomValidity(`Пользователь! Цена не должна быть выше ${formPrice.max}`);
   } else {
     formPrice.setCustomValidity('');
   }
@@ -105,8 +107,9 @@ const optionsPriceMapping = {
   3: [1, 2, 3],
   100: [0],
 };
+
 // напишем функцию сопастовления данных из одного селекта в другой
-function getMatchingSelect(select1, select2, mapping) {
+const getMatchingSelect = function (select1, select2, mapping) {
 
   return () => {
     const value = +select1.value;
@@ -125,7 +128,67 @@ function getMatchingSelect(select1, select2, mapping) {
       }
     }
   };
-}
+};
+
+// функция сопастовления данных селекта и инпута
+const getOptionSelect = function(select, input) {
+
+  return () => {
+    const options = select.options;
+    const selind = options.selectedIndex;
+
+    switch(selind) {
+      case 0:
+        input.placeholder = 0;
+        input.min = 0;
+        break;
+      case 1:
+        input.placeholder = 1000;
+        input.min = 1000;
+        break;
+      case 2:
+        input.placeholder = 3000;
+        input.min = 3000;
+        break;
+      case 3:
+        input.placeholder = 5000;
+        input.min = 5000;
+        break;
+      case 4:
+        input.placeholder = 10000;
+        input.min = 10000;
+        break;
+    }
+  };
+};
+
+// функция для сопастовления выбора времени заезда и выезда
+const getMatchingTime = function(select1, select2) {
+
+  return () => {
+    const options1 = select1.options;
+    const selind1 = options1.selectedIndex;
+    const options2 = select2.options;
+
+    switch(selind1) {
+      case 0:
+        options2[0].selected = true;
+        break;
+      case 1:
+        options2[1].selected = true;
+        break;
+      case 2:
+        options2[2].selected = true;
+        break;
+    }
+  };
+};
+
+formTimeIn.addEventListener('change', getMatchingTime(formTimeIn, formTimeOut));
+
+formTimeOut.addEventListener('change', getMatchingTime( formTimeOut, formTimeIn));
+
+formHouseType.addEventListener('change', getOptionSelect(formHouseType, formPrice));
 
 formRooms.addEventListener('change', getMatchingSelect(formRooms, formCapacity, optionsPriceMapping));
 

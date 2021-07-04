@@ -81,5 +81,5 @@ const getCreateCard = ({offer, author}) => {
   getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
 };
 
-getCreateCard(similarData[8]);
+getCreateCard(similarData[1]);
 
