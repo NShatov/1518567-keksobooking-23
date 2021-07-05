@@ -1,3 +1,5 @@
+import {housingType} from './card.js';
+
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
 
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
@@ -131,34 +133,13 @@ const getMatchingSelect = function (select1, select2, mapping) {
 };
 
 // функция сопастовления данных селекта и инпута
-const getOptionSelect = function(select, input) {
+const getOptionSelect = function(select, input, mapping) {
 
   return () => {
-    const options = select.options;
-    const selind = options.selectedIndex;
-
-    switch(selind) {
-      case 0:
-        input.placeholder = 0;
-        input.min = 0;
-        break;
-      case 1:
-        input.placeholder = 1000;
-        input.min = 1000;
-        break;
-      case 2:
-        input.placeholder = 3000;
-        input.min = 3000;
-        break;
-      case 3:
-        input.placeholder = 5000;
-        input.min = 5000;
-        break;
-      case 4:
-        input.placeholder = 10000;
-        input.min = 10000;
-        break;
-    }
+    const selectValue = select.value;
+    const price = mapping[selectValue].price;
+    input.placeholder = price;
+    input.min = price;
   };
 };
 
@@ -166,21 +147,11 @@ const getOptionSelect = function(select, input) {
 const getMatchingTime = function(select1, select2) {
 
   return () => {
-    const options1 = select1.options;
-    const selind1 = options1.selectedIndex;
-    const options2 = select2.options;
+    const value1 = select1.value;
+    const value2 = select2.value;
+    const selind = select1.options.selectedIndex;
+    value2 = value1;
 
-    switch(selind1) {
-      case 0:
-        options2[0].selected = true;
-        break;
-      case 1:
-        options2[1].selected = true;
-        break;
-      case 2:
-        options2[2].selected = true;
-        break;
-    }
   };
 };
 
@@ -188,7 +159,7 @@ formTimeIn.addEventListener('change', getMatchingTime(formTimeIn, formTimeOut));
 
 formTimeOut.addEventListener('change', getMatchingTime( formTimeOut, formTimeIn));
 
-formHouseType.addEventListener('change', getOptionSelect(formHouseType, formPrice));
+formHouseType.addEventListener('change', getOptionSelect(formHouseType, formPrice, housingType));
 
 formRooms.addEventListener('change', getMatchingSelect(formRooms, formCapacity, optionsPriceMapping));
 
