@@ -152,6 +152,7 @@ const getMatchingTime = function(select1, select2) {
     value2.selected = true;
   };
 };
+
 // не рабочий вариант
 /*const getMatchingTime = function(select1, select2) {
 
