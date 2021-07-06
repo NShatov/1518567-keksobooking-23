@@ -9,11 +9,26 @@ const cardPopupTemplate = document.querySelector('#card').content.querySelector(
 
 // создадим словарь для типа жилья
 const housingType = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
+  bungalow: {
+    name: 'Бунгало',
+    price: 0,
+  },
+  flat: {
+    name:'Квартира',
+    price: 1000,
+  },
+  hotel: {
+    name: 'Отель',
+    price: 3000,
+  },
+  house: {
+    name: 'Дом',
+    price: 5000,
+  },
+  palace: {
+    name: 'Дворец',
+    price: 10000,
+  },
 };
 
 const cardFragment = document.createDocumentFragment(); // создадим фрагмент
@@ -82,4 +97,6 @@ const getCreateCard = ({offer, author}) => {
 };
 
 getCreateCard(similarData[1]);
+
+export {housingType};
 
