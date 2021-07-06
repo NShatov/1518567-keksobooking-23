@@ -112,61 +112,50 @@ const optionsPriceMapping = {
 
 // напишем функцию сопастовления данных из одного селекта в другой
 const getMatchingSelect = function (select1, select2, mapping) {
+  const value = +select1.value;
+  const options = select2.options;
+  const optionsLength = options.length;
+  const availableOptions = mapping[value];
 
-  return () => {
-    const value = +select1.value;
-    const options = select2.options;
-    const optionsLength = options.length;
-    const availableOptions = mapping[value];
-
-    for (let index = 0; index < optionsLength; index++) {
-      if (availableOptions.indexOf(+options[index].value) !== -1) {
-        options[index].disabled = false;
-        if (+options[index].value === value || availableOptions.length === 1) {
-          options[index].selected = true;
-        }
-      } else {
-        options[index].disabled = true;
+  for (let index = 0; index < optionsLength; index++) {
+    if (availableOptions.indexOf(+options[index].value) !== -1) {
+      options[index].disabled = false;
+      if (+options[index].value === value || availableOptions.length === 1) {
+        options[index].selected = true;
       }
+    } else {
+      options[index].disabled = true;
     }
-  };
+  }
 };
 
 // функция сопастовления данных селекта и инпута
 const getOptionSelect = function(select, input, mapping) {
-
-  return () => {
-    const selectValue = select.value;
-    const price = mapping[selectValue].price;
-    input.placeholder = price;
-    input.min = price;
-  };
+  const selectValue = select.value;
+  const price = mapping[selectValue].price;
+  input.placeholder = price;
+  input.min = price;
 };
 
-// функция для сопастовления выбора времени заезда и выезда - рабочий вариант
+// функция для сопастовления выбора времени заезда и выезда
 const getMatchingTime = function(select1, select2) {
-
-  return () => {
-    const selind = select1.options.selectedIndex;
-    const value2 = select2.options[selind];
-    value2.selected = true;
-  };
+  select2.value = select1.value;
 };
 
-// не рабочий вариант
-/*const getMatchingTime = function(select1, select2) {
+formTimeIn.addEventListener('change', () => {
+  getMatchingTime(formTimeIn, formTimeOut);
+});
 
-  return () => {
-    select1.value = select2.value;
-  };
-};*/
+formTimeOut.addEventListener('change', () => {
+  getMatchingTime(formTimeOut, formTimeIn);
+});
 
-formTimeIn.addEventListener('change', getMatchingTime(formTimeIn, formTimeOut));
+formHouseType.addEventListener('change', () => {
+  getOptionSelect(formHouseType, formPrice, housingType);
+});
 
-formTimeOut.addEventListener('change', getMatchingTime( formTimeOut, formTimeIn));
-
-formHouseType.addEventListener('change', getOptionSelect(formHouseType, formPrice, housingType));
-
-formRooms.addEventListener('change', getMatchingSelect(formRooms, formCapacity, optionsPriceMapping));
+formRooms.addEventListener('change', () => {
+  getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
+});
 
 export {getInactiveForm};
