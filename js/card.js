@@ -9,11 +9,26 @@ const cardPopupTemplate = document.querySelector('#card').content.querySelector(
 
 // создадим словарь для типа жилья
 const housingType = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
+  bungalow: {
+    name: 'Бунгало',
+    price: 0,
+  },
+  flat: {
+    name:'Квартира',
+    price: 1000,
+  },
+  hotel: {
+    name: 'Отель',
+    price: 3000,
+  },
+  house: {
+    name: 'Дом',
+    price: 5000,
+  },
+  palace: {
+    name: 'Дворец',
+    price: 10000,
+  },
 };
 
 const cardFragment = document.createDocumentFragment(); // создадим фрагмент
@@ -36,7 +51,7 @@ const getCreateCard = ({offer, author}) => {
   popupAddress.textContent = (!offer.address) ? popupAddress.remove() : offer.address;
   popupPrice.textContent = (!offer.price) ? popupPrice.remove() : `${offer.price} ₽/ночь`;
   popupDescription.textContent = (!offer.description) ? popupDescription.remove() : offer.description;
-  popupType.textContent = (!offer.type) ? popupType.remove() : housingType[offer.type];
+  popupType.textContent = (!offer.type) ? popupType.remove() : housingType[offer.type].name;
   popupCapacity.textContent = (!offer.rooms || !offer.guests) ? popupCapacity.remove() : `${offer.rooms} комнаты для ${offer.guests} гостей`;
   popupTime.textContent = (!offer.checkin || !offer.checkout) ? popupTime.remove(): `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
@@ -81,5 +96,7 @@ const getCreateCard = ({offer, author}) => {
   getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
 };
 
-getCreateCard(similarData[8]);
+/*getCreateCard(similarData[1]);*/
+
+export {housingType};
 

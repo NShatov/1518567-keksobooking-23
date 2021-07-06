@@ -1,3 +1,5 @@
+import {housingType} from './card.js';
+
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
 
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
@@ -28,14 +30,17 @@ const getInactiveForm = (inactive) => {
   }
 };
 
-getInactiveForm(false);
+getInactiveForm(true);
 
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
 const formPrice = form.querySelector('#price'); // поле с ценой
 const formRooms = form.querySelector('#room_number'); // поле с комнатами
 const formCapacity = form.querySelector('#capacity'); // поле с гостями
-
+const formHouseType = form.querySelector('#type');
+const formTimeIn = form.querySelector('#timein');
+const formTimeOut = form.querySelector('#timeout');
+const formAddress = form.querySelector('#address'); // адрес в форме
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -77,9 +82,9 @@ formPrice.addEventListener('invalid', () => {
   if (formPrice.validity.valueMissing) {
     formPrice.setCustomValidity('Пользователь! Нужно ввести значение в поле');
   } else if (formPrice.validity.rangeUnderflow) {
-    formPrice.setCustomValidity(`Пользователь! Цена должна быть выше ${MIN_PRICE}`);
+    formPrice.setCustomValidity(`Пользователь! Цена должна быть выше ${formPrice.min}`);
   } else if (formPrice.validity.rangeOverflow) {
-    formPrice.setCustomValidity(`Пользователь! Цена не должна быть выше ${MAX_PRICE}`);
+    formPrice.setCustomValidity(`Пользователь! Цена не должна быть выше ${formPrice.max}`);
   } else {
     formPrice.setCustomValidity('');
   }
@@ -105,28 +110,56 @@ const optionsPriceMapping = {
   3: [1, 2, 3],
   100: [0],
 };
+
 // напишем функцию сопастовления данных из одного селекта в другой
-function getMatchingSelect(select1, select2, mapping) {
+const getMatchingSelect = function (select1, select2, mapping) {
+  const value = +select1.value;
+  const options = select2.options;
+  const optionsLength = options.length;
+  const availableOptions = mapping[value];
 
-  return () => {
-    const value = +select1.value;
-    const options = select2.options;
-    const optionsLength = options.length;
-    const availableOptions = mapping[value];
-
-    for (let index = 0; index < optionsLength; index++) {
-      if (availableOptions.indexOf(+options[index].value) !== -1) {
-        options[index].disabled = false;
-        if (+options[index].value === value || availableOptions.length === 1) {
-          options[index].selected = true;
-        }
-      } else {
-        options[index].disabled = true;
+  for (let index = 0; index < optionsLength; index++) {
+    if (availableOptions.indexOf(+options[index].value) !== -1) {
+      options[index].disabled = false;
+      if (+options[index].value === value || availableOptions.length === 1) {
+        options[index].selected = true;
       }
+    } else {
+      options[index].disabled = true;
     }
-  };
-}
+  }
+};
 
-formRooms.addEventListener('change', getMatchingSelect(formRooms, formCapacity, optionsPriceMapping));
+// функция сопастовления данных селекта и инпута
+const getOptionSelect = function(select, input, mapping) {
+  const selectValue = select.value;
+  const price = mapping[selectValue].price;
+  input.placeholder = price;
+  input.min = price;
+};
 
-export {getInactiveForm};
+// функция для сопастовления выбора времени заезда и выезда
+const getMatchingTime = function(select1, select2) {
+  select2.value = select1.value;
+};
+
+formTimeIn.addEventListener('change', () => {
+  getMatchingTime(formTimeIn, formTimeOut);
+});
+
+formTimeOut.addEventListener('change', () => {
+  getMatchingTime(formTimeOut, formTimeIn);
+});
+
+formHouseType.addEventListener('change', () => {
+  getOptionSelect(formHouseType, formPrice, housingType);
+});
+
+formRooms.addEventListener('change', () => {
+  getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
+});
+
+export {
+  getInactiveForm,
+  formAddress
+};
