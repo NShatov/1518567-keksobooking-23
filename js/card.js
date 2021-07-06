@@ -51,7 +51,7 @@ const getCreateCard = ({offer, author}) => {
   popupAddress.textContent = (!offer.address) ? popupAddress.remove() : offer.address;
   popupPrice.textContent = (!offer.price) ? popupPrice.remove() : `${offer.price} ₽/ночь`;
   popupDescription.textContent = (!offer.description) ? popupDescription.remove() : offer.description;
-  popupType.textContent = (!offer.type) ? popupType.remove() : housingType[offer.type];
+  popupType.textContent = (!offer.type) ? popupType.remove() : housingType[offer.type].name;
   popupCapacity.textContent = (!offer.rooms || !offer.guests) ? popupCapacity.remove() : `${offer.rooms} комнаты для ${offer.guests} гостей`;
   popupTime.textContent = (!offer.checkin || !offer.checkout) ? popupTime.remove(): `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
