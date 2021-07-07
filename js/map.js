@@ -54,5 +54,7 @@ mainPinMarker.addTo(map);
 // выведем в консоль новые координаты, когда пользователь отпустит маркер
 mainPinMarker.on('moveend', (evt) => {
   const address = evt.target.getLatLng();
-  formAddress.value = Object.values(address).join(', ');
+  const lat = address.lat.toFixed(5);
+  const lng = address.lng.toFixed(5);
+  formAddress.value = `${lat}, ${lng}`;
 });
