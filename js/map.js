@@ -7,6 +7,13 @@ const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
 const ZOOM = 10;
 
+const addressTokio = {
+  lat: MARKER_LAT,
+  lng: MARKER_LNG,
+};
+// установим начальное значение в поле адреса
+formAddress.value = Object.values(addressTokio).join(', ');
+
 const map = L.map('map-canvas')
   .on('load', () => {
     getInactiveForm(false);
@@ -41,9 +48,11 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
 // добавим метку на карту
 mainPinMarker.addTo(map);
 // выведем в консоль новые координаты, когда пользователь отпустит маркер
 mainPinMarker.on('moveend', (evt) => {
-  formAddress.textContent(evt.target.getLatLng());
+  const address = evt.target.getLatLng();
+  formAddress.value = Object.values(address).join(', ');
 });
