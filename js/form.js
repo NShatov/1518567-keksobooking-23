@@ -30,7 +30,7 @@ const getInactiveForm = (inactive) => {
   }
 };
 
-getInactiveForm(true); // по умолчанию форма должна быть неактивной
+getInactiveForm(false);
 
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
@@ -40,7 +40,6 @@ const formCapacity = form.querySelector('#capacity'); // поле с гостя�
 const formHouseType = form.querySelector('#type');
 const formTimeIn = form.querySelector('#timein');
 const formTimeOut = form.querySelector('#timeout');
-const formAddress = form.querySelector('#address'); // адрес в форме
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -159,7 +158,4 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
-export {
-  getInactiveForm,
-  formAddress
-};
+export {getInactiveForm};
