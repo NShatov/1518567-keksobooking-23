@@ -30,7 +30,7 @@ const getInactiveForm = (inactive) => {
   }
 };
 
-getInactiveForm(true);
+getInactiveForm(true); // по умолчанию форма должна быть неактивной
 
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы

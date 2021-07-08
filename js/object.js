@@ -49,6 +49,10 @@ const createData = function (number) {
       'description': DESCRIPTION,
       'photos': randomArrayValues(getRandomInteger(1, PHOTOS.length), PHOTOS),
     },
+    'location': {
+      'lat': loc.lat,
+      'lng': loc.lng,
+    },
   };
 };
 

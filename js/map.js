@@ -3,6 +3,10 @@ import {
   formAddress
 } from './form.js';
 
+import {similarData} from './object.js';
+
+// import {getCreateCard} from '/.card.js';
+
 const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
 const ZOOM = 10;
@@ -33,8 +37,8 @@ L.tileLayer(
 // создадим иконку для маркера
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
 });
 
 // создадим метку - центр Токио
@@ -57,4 +61,18 @@ mainPinMarker.on('moveend', (evt) => {
   const lat = address.lat.toFixed(5);
   const lng = address.lng.toFixed(5);
   formAddress.value = `${lat}, ${lng}`;
+});
+
+//выведем метки объявлений на карту
+console.log(similarData);
+similarData.forEach(({location}) => {
+  const lat = location.lat;
+  const lng = location.lng;
+  const icon = L.icon({
+    iconUrl: '../img/pin.svg',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  });
+  const marker =L.marker({lat,lng},{icon});
+  marker.addTo(map);
 });
