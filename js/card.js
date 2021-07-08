@@ -1,4 +1,3 @@
-import {similarData} from './object.js'; // импортируем массив с объектами
 import {getInsertData} from './util.js'; // импортируем ф-ию для отрисовки данных в карточку
 
 // найдем блок в который нужно отрисовать первый элемент #map-canvas
@@ -96,7 +95,8 @@ const getCreateCard = ({offer, author}) => {
   getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
 };
 
-getCreateCard(similarData[1]);
-
-export {housingType};
+export {
+  housingType,
+  getCreateCard
+};
 

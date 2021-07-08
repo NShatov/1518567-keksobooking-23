@@ -5,7 +5,7 @@ import {
 
 import {similarData} from './object.js';
 
-// import {getCreateCard} from '/.card.js';
+import {getCreateCard} from './card.js';
 
 const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
@@ -73,6 +73,6 @@ similarData.forEach(({location}) => {
     iconSize: [40, 40],
     iconAnchor: [20, 40],
   });
-  const marker =L.marker({lat,lng},{icon});
-  marker.addTo(map);
+  const marker = L.marker({lat,lng},{icon});
+  marker.addTo(map).bindPopup(getCreateCard(similarData[0]));
 });
