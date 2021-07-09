@@ -84,13 +84,12 @@ const getMarkerMap = (card) => {
     marker
       .addTo(map)
       .bindPopup(
-        (getCreateCard(offer, author)),
+        (getCreateCard({offer, author})),
         {
           keepInView: true,
         },
       );
   });
 };
-
 getMarkerMap(similarData);
 

@@ -37,6 +37,7 @@ const getCreateCard = ({offer, author}) => {
 
   // запишем в переменные блоки шаблона чтобы удобнее было с ними работать
   const popupAvatar = cardPopup.querySelector('.popup__avatar');
+
   const popupTitle = cardPopup.querySelector('.popup__title');
   const popupAddress = cardPopup.querySelector('.popup__text--address');
   const popupPrice = cardPopup.querySelector('.popup__text--price');
@@ -88,7 +89,7 @@ const getCreateCard = ({offer, author}) => {
       photoListElement.insertAdjacentHTML('beforeend', `<img src="${address}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
     });
   }
-  return cardPopup;
+  return cardPopup; // функция должна возвращать карточку
   // добавляем данные во фрагмент
   // cardFragment.appendChild(cardPopup);
 
