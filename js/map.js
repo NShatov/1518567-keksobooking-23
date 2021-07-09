@@ -5,7 +5,7 @@ import {
 
 import {similarData} from './object.js';
 
-import {getCreateCard} from './card.js';
+// import {getCreateCard} from './card.js';
 
 const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
@@ -64,15 +64,22 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 //выведем метки объявлений на карту
-console.log(similarData);
-similarData.forEach(({location}) => {
+similarData.forEach(({location, offer}) => {
   const lat = location.lat;
   const lng = location.lng;
+  const title = offer.title;
   const icon = L.icon({
     iconUrl: '../img/pin.svg',
     iconSize: [40, 40],
     iconAnchor: [20, 40],
   });
   const marker = L.marker({lat,lng},{icon});
-  marker.addTo(map).bindPopup(getCreateCard(similarData[0]));
+  marker
+    .addTo(map)
+    .bindPopup(
+      title,
+      {
+        keepInView: true,
+      },
+    );
 });
