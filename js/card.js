@@ -1,8 +1,7 @@
-import {similarData} from './object.js'; // импортируем массив с объектами
-import {getInsertData} from './util.js'; // импортируем ф-ию для отрисовки данных в карточку
+// import {getInsertData} from './util.js'; // импортируем ф-ию для отрисовки данных в карточку
 
 // найдем блок в который нужно отрисовать первый элемент #map-canvas
-const mapCanvas = document.querySelector('#map-canvas');
+// const mapCanvas = document.querySelector('#map-canvas');
 
 // найдем в разметке шаблон #card и в нём попап
 const cardPopupTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -31,13 +30,14 @@ const housingType = {
   },
 };
 
-const cardFragment = document.createDocumentFragment(); // создадим фрагмент
+// const cardFragment = document.createDocumentFragment(); // создадим фрагмент
 
 const getCreateCard = ({offer, author}) => {
   const cardPopup = cardPopupTemplate.cloneNode(true); // клонируем шаблон в переменную
 
   // запишем в переменные блоки шаблона чтобы удобнее было с ними работать
   const popupAvatar = cardPopup.querySelector('.popup__avatar');
+
   const popupTitle = cardPopup.querySelector('.popup__title');
   const popupAddress = cardPopup.querySelector('.popup__text--address');
   const popupPrice = cardPopup.querySelector('.popup__text--price');
@@ -89,14 +89,15 @@ const getCreateCard = ({offer, author}) => {
       photoListElement.insertAdjacentHTML('beforeend', `<img src="${address}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
     });
   }
-
+  return cardPopup; // функция должна возвращать карточку
   // добавляем данные во фрагмент
-  cardFragment.appendChild(cardPopup);
+  // cardFragment.appendChild(cardPopup);
 
-  getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
+  // getInsertData(mapCanvas, cardFragment); // записываем через функцию фрагмент в блок
 };
 
-getCreateCard(similarData[1]);
-
-export {housingType};
+export {
+  housingType,
+  getCreateCard
+};
 

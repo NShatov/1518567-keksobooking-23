@@ -40,6 +40,7 @@ const formCapacity = form.querySelector('#capacity'); // поле с гостя�
 const formHouseType = form.querySelector('#type');
 const formTimeIn = form.querySelector('#timein');
 const formTimeOut = form.querySelector('#timeout');
+const formAddress = form.querySelector('#address');
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -158,4 +159,7 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
-export {getInactiveForm};
+export {
+  getInactiveForm,
+  formAddress
+};
