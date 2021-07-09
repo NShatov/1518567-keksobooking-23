@@ -88,6 +88,7 @@ const getCreateCard = ({offer, author}) => {
       photoListElement.insertAdjacentHTML('beforeend', `<img src="${address}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
     });
   }
+  return cardPopup;
   // добавляем данные во фрагмент
   // cardFragment.appendChild(cardPopup);
 
