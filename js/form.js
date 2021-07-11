@@ -159,7 +159,31 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
+// вешаем обработчик события на отправку формы на сервер
+
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    fetch (
+      'https://23.javascript.pages.academy/keksobooking/data',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
+      .then(() => onSuccess())
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+};
+
+
 export {
   getInactiveForm,
-  formAddress
+  formAddress,
+  setUserFormSubmit
 };

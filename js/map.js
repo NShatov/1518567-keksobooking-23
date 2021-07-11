@@ -3,8 +3,6 @@ import {
   formAddress
 } from './form.js';
 
-import {similarData} from './object.js';
-
 import {getCreateCard} from './card.js';
 
 const MARKER_LAT = 35.6894;
@@ -91,5 +89,5 @@ const getMarkerMap = (card) => {
       );
   });
 };
-getMarkerMap(similarData);
 
+export {getMarkerMap};
