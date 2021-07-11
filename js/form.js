@@ -160,7 +160,6 @@ formRooms.addEventListener('change', () => {
 });
 
 // вешаем обработчик события на отправку формы на сервер
-
 const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -175,7 +174,7 @@ const setUserFormSubmit = () => {
       },
     )
       .then((response) => {
-        if (responce.ok) {
+        if (response.ok) {
           getPopupShow(successForm);
         } else {
           getPopupShow(errorForm);
