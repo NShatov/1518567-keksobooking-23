@@ -1,15 +1,15 @@
 import {housingType} from './card.js';
-
+import {getPopupShow} from './util.js';
+// элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
-
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
-
 const mapFiltersForm = document.querySelector('.map__filters'); // найдем форму с фильтрами
-
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
-
 const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найдем область с кнопка-фичами
-
+// сообщения об успешной отправке и ошибках
+const successForm = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+const errorForm = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+const errorServer = document.querySelector('#error-response').content.querySelector('.error').cloneNode(true);
 // создадим функцию для перевода страницы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
   //добавим атрибут disabled через перебор
@@ -161,29 +161,35 @@ formRooms.addEventListener('change', () => {
 
 // вешаем обработчик события на отправку формы на сервер
 
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.target);
 
     fetch (
-      'https://23.javascript.pages.academy/keksobooking/data',
+      'https://23.javascript.pages.academy/keksobooking',
       {
         method: 'POST',
         body: formData,
       },
     )
-      .then(() => onSuccess())
-      .catch((err) => {
-        console.error(err);
+      .then((response) => {
+        if (responce.ok) {
+          getPopupShow(successForm);
+        } else {
+          getPopupShow(errorForm);
+        }
+      })
+      .catch(() => {
+        getPopupShow(errorForm);
       });
   });
 };
 
-
 export {
   getInactiveForm,
   formAddress,
-  setUserFormSubmit
+  setUserFormSubmit,
+  errorServer
 };

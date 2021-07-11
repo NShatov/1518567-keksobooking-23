@@ -1,4 +1,5 @@
 const ERROR_MSG = 'Выбран неверный диапазон';
+const POPUP_SHOW_TIME = 3000;
 
 const getRandomInteger = function(min, max) {
   try {
@@ -40,11 +41,20 @@ const randomArrayValues = (lengthArray, array) => {
 //функция для отрисовки данных в карточку
 const getInsertData = (block, fragment) => block.appendChild(fragment);
 
+//функция показа модали с сообщением
+const getPopupShow = (modal) => {
+  document.body.append(modal);
+  setTimeout(() => {
+    modal.remove();
+  }, POPUP_SHOW_TIME);
+};
+
 export{
   getRandomInteger,
   getRandomFloat,
   getRandomArrayElement,
   randomArrayValues,
-  getInsertData
+  getInsertData,
+  getPopupShow
 };
 
