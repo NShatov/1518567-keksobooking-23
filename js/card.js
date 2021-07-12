@@ -89,4 +89,3 @@ export {
   housingType,
   getCreateCard
 };
-

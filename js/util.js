@@ -49,12 +49,18 @@ const getPopupShow = (modal) => {
   }, POPUP_SHOW_TIME);
 };
 
+//функция передачи данных в поле формы из объекта
+const setFormAddress = (input, object) => {
+  input.value = Object.values(object).join(', ');
+};
+
 export{
   getRandomInteger,
   getRandomFloat,
   getRandomArrayElement,
   randomArrayValues,
   getInsertData,
-  getPopupShow
+  getPopupShow,
+  setFormAddress
 };
 

@@ -1,16 +1,20 @@
 import {housingType} from './card.js';
-import {getPopupShow} from './util.js';
+import {getPopupShow, setFormAddress} from './util.js';
+import {addressTokio, mainPinMarker} from './map.js';
+
 // элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
 const mapFiltersForm = document.querySelector('.map__filters'); // найдем форму с фильтрами
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
 const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найдем область с кнопка-фичами
+const resetForm = form.querySelector('.ad-form__reset'); // кнопка очистки формы
 // сообщения об успешной отправке и ошибках
 const successForm = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 const errorForm = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 const errorServer = document.querySelector('#error-response').content.querySelector('.error').cloneNode(true);
-// создадим функцию для перевода страницы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
+
+// создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
   //добавим атрибут disabled через перебор
   formFieldsets.forEach((item) => {
@@ -29,8 +33,6 @@ const getInactiveForm = (inactive) => {
     mapFiltersForm.classList.remove('map__filters--disabled');
   }
 };
-
-getInactiveForm(false);
 
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
@@ -167,7 +169,7 @@ const setUserFormSubmit = () => {
     const formData = new FormData(evt.target);
 
     fetch (
-      'https://23.javascript.pages.academy/keksobooking',
+      'https://23.javascript.pages.academy/keksobooking ',
       {
         method: 'POST',
         body: formData,
@@ -185,6 +187,19 @@ const setUserFormSubmit = () => {
       });
   });
 };
+
+//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
+const getResetForm = () => {
+  resetForm.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    setFormAddress(formAddress, addressTokio);
+    mainPinMarker.setLatLng(addressTokio);
+  });
+};
+
+getResetForm();
+setUserFormSubmit();
+getInactiveForm(true); // установим форму в неактивное состояние
 
 export {
   getInactiveForm,
