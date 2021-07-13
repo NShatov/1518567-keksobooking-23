@@ -1,5 +1,5 @@
 import {housingType} from './card.js';
-import {getPopupShow, setFormAddress} from './util.js';
+import {getPopupShowTimeout, getPopupShow, setFormAddress} from './util.js';
 import {addressTokio, mainPinMarker} from './map.js';
 
 // элементы формы
@@ -13,6 +13,9 @@ const resetForm = form.querySelector('.ad-form__reset'); // кнопка очи�
 const successForm = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 const errorForm = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 const errorServer = document.querySelector('#error-response').content.querySelector('.error').cloneNode(true);
+// кнопки закрытия модалок
+const buttonCloseErrorForm = errorForm.querySelector('.error__button');
+const buttonCloseErrorServer = errorServer.querySelector('.error__button');
 
 // создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
@@ -161,18 +164,22 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
-//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
-
+//функция сброса формы в исходное состояние
 const getResetForm = () => {
+  form.reset();
+  setFormAddress(formAddress, addressTokio);
+  mainPinMarker.setLatLng(addressTokio);
+};
+
+//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
+const getResetButtonForm = () => {
   resetForm.addEventListener('click', (evt) => {
     evt.preventDefault();
-    form.reset();
-    setFormAddress(formAddress, addressTokio);
-    mainPinMarker.setLatLng(addressTokio);
+    getResetForm();
   });
 };
 
-// вешаем обработчик события на отправку формы на сервер
+// вешаем обработчик события на кнопку отправки формы на сервер
 const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -188,18 +195,19 @@ const setUserFormSubmit = () => {
     )
       .then((response) => {
         if (response.ok) {
-          getPopupShow(successForm);
+          getResetForm();
+          getPopupShowTimeout(successForm);
         } else {
-          getPopupShow(errorForm);
+          getPopupShow(errorForm, buttonCloseErrorForm);
         }
       })
       .catch(() => {
-        getPopupShow(errorForm);
+        getPopupShow(errorForm, buttonCloseErrorForm);
       });
   });
 };
 
-getResetForm();
+getResetButtonForm();
 setUserFormSubmit();
 getInactiveForm(true); // установим форму в неактивное состояние
 
@@ -207,5 +215,6 @@ export {
   getInactiveForm,
   formAddress,
   setUserFormSubmit,
-  errorServer
+  errorServer,
+  buttonCloseErrorServer
 };

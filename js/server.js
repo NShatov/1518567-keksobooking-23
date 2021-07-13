@@ -1,7 +1,7 @@
 // модуль для работы с сервером
 import {getMarkerMap} from './map.js';
 import {getPopupShow} from './util.js';
-import {errorServer} from './form.js';
+import {errorServer, buttonCloseErrorServer} from './form.js';
 
 fetch('https://23.javascript.pages.academy/keksobooking/data')
   .then((response) => response.json())
@@ -9,6 +9,6 @@ fetch('https://23.javascript.pages.academy/keksobooking/data')
     getMarkerMap(ads);
   })
   .catch(() => {
-    getPopupShow(errorServer);
+    getPopupShow(errorServer, buttonCloseErrorServer);
   });
 

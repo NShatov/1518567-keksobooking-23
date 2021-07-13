@@ -41,12 +41,33 @@ const randomArrayValues = (lengthArray, array) => {
 //функция для отрисовки данных в карточку
 const getInsertData = (block, fragment) => block.appendChild(fragment);
 
-//функция показа модали с сообщением
-const getPopupShow = (modal) => {
+//функция показа модали с автозакрытием
+const getPopupShowTimeout = (modal) => {
   document.body.append(modal);
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      modal.remove();
+    }
+  });
   setTimeout(() => {
     modal.remove();
   }, POPUP_SHOW_TIME);
+};
+
+//функция показа модалки без автозакрытия
+const getPopupShow = (modal, button) => {
+  document.body.append(modal);
+  button.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      modal.remove();
+    }
+  });
 };
 
 //функция передачи данных в поле формы адреса из объекта
@@ -60,6 +81,7 @@ export{
   getRandomArrayElement,
   randomArrayValues,
   getInsertData,
+  getPopupShowTimeout,
   getPopupShow,
   setFormAddress
 };
