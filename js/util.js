@@ -49,7 +49,7 @@ const getPopupShow = (modal) => {
   }, POPUP_SHOW_TIME);
 };
 
-//функция передачи данных в поле формы из объекта
+//функция передачи данных в поле формы адреса из объекта
 const setFormAddress = (input, object) => {
   input.value = Object.values(object).join(', ');
 };

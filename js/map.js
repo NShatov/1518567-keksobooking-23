@@ -10,7 +10,7 @@ const addressTokio = {
   lat: MARKER_LAT,
   lng: MARKER_LNG,
 };
-
+// устновим начальные данные в поле адреса формы
 setFormAddress(formAddress, addressTokio);
 
 const map = L.map('map-canvas')

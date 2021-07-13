@@ -161,6 +161,17 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
+//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
+
+const getResetForm = () => {
+  resetForm.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    form.reset();
+    setFormAddress(formAddress, addressTokio);
+    mainPinMarker.setLatLng(addressTokio);
+  });
+};
+
 // вешаем обработчик события на отправку формы на сервер
 const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
@@ -185,15 +196,6 @@ const setUserFormSubmit = () => {
       .catch(() => {
         getPopupShow(errorForm);
       });
-  });
-};
-
-//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
-const getResetForm = () => {
-  resetForm.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    setFormAddress(formAddress, addressTokio);
-    mainPinMarker.setLatLng(addressTokio);
   });
 };
 
