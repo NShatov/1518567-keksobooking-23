@@ -38,14 +38,20 @@ const randomArrayValues = (lengthArray, array) => {
   return newArray;
 };
 
-//функция для отрисовки данных в карточку
-const getInsertData = (block, fragment) => block.appendChild(fragment);
+//функция передачи данных в поле формы адреса из объекта
+const setFormAddress = (input, object) => {
+  input.value = Object.values(object).join(', ');
+};
+
+const isEscEvent = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
 
 //функция показа модали с автозакрытием
 const getPopupShowTimeout = (modal) => {
   document.body.append(modal);
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscEvent(evt)) {
       evt.preventDefault();
       modal.remove();
     }
@@ -58,31 +64,55 @@ const getPopupShowTimeout = (modal) => {
 //функция показа модалки без автозакрытия
 const getPopupShow = (modal, button) => {
   document.body.append(modal);
+
   button.addEventListener('click', (evt) => {
     evt.preventDefault();
     modal.remove();
   });
+
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscEvent(evt)) {
       evt.preventDefault();
       modal.remove();
     }
   });
+
+  document.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
 };
 
-//функция передачи данных в поле формы адреса из объекта
-const setFormAddress = (input, object) => {
-  input.value = Object.values(object).join(', ');
+// функция удаления модалки
+const getPopupClose = (button, modal) => {
+
+  button.removeEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
+
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      modal.remove();
+    }
+  });
+
+  document.removeEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
 };
+
 
 export{
   getRandomInteger,
   getRandomFloat,
   getRandomArrayElement,
   randomArrayValues,
-  getInsertData,
   getPopupShowTimeout,
   getPopupShow,
+  getPopupClose,
   setFormAddress
 };
 
