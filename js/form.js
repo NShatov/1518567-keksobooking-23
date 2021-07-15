@@ -1,5 +1,11 @@
 import {housingType} from './card.js';
-import {getPopupShowTimeout, getPopupShow, setFormAddress, getPopupClose} from './util.js';
+import {
+  getPopupShowTimeout,
+  getPopupCloseTimeout,
+  getPopupShow,
+  setFormAddress,
+  getPopupClose
+} from './util.js';
 import {addressTokio, mainPinMarker} from './map.js';
 
 // элементы формы
@@ -197,6 +203,7 @@ const setUserFormSubmit = () => {
         if (response.ok) {
           getResetForm();
           getPopupShowTimeout(successForm);
+          getPopupCloseTimeout(successForm);
         } else {
           getPopupShow(errorForm, buttonCloseErrorForm);
           getPopupClose(errorForm, buttonCloseErrorForm);
@@ -208,6 +215,14 @@ const setUserFormSubmit = () => {
       });
   });
 };
+
+/*document.addEventListener('keydown', () => {
+  getPopupClose(errorForm, buttonCloseErrorForm);
+});
+
+document.addEventListener('click', () => {
+  getPopupClose(errorForm, buttonCloseErrorForm);
+});*/
 
 getResetButtonForm();
 setUserFormSubmit();
