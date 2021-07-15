@@ -4,7 +4,9 @@ import {
   getPopupCloseTimeout,
   getPopupShow,
   setFormAddress,
-  getPopupClose
+  popupEscClose,
+  popupClickClose,
+  isEscEvent
 } from './util.js';
 import {addressTokio, mainPinMarker} from './map.js';
 
@@ -206,23 +208,23 @@ const setUserFormSubmit = () => {
           getPopupCloseTimeout(successForm);
         } else {
           getPopupShow(errorForm, buttonCloseErrorForm);
-          getPopupClose(errorForm, buttonCloseErrorForm);
         }
       })
       .catch(() => {
         getPopupShow(errorForm, buttonCloseErrorForm);
-        getPopupClose(errorForm, buttonCloseErrorForm);
       });
   });
 };
 
-/*document.addEventListener('keydown', () => {
-  getPopupClose(errorForm, buttonCloseErrorForm);
+errorForm.addEventListener('keydown', (evt) => {
+  if (isEscEvent(evt)){
+    popupEscClose(errorForm);
+  }
 });
 
-document.addEventListener('click', () => {
-  getPopupClose(errorForm, buttonCloseErrorForm);
-});*/
+errorForm.addEventListener('click', () => {
+  popupClickClose(errorForm);
+});
 
 getResetButtonForm();
 setUserFormSubmit();

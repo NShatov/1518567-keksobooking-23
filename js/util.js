@@ -7,8 +7,10 @@ const setFormAddress = (input, object) => {
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-// функция добавления обработчика на ESC
-const onPopupEscKeydown = (modal) => {
+//функция показа модали с автозакрытием
+const getPopupShowTimeout = (modal) => {
+  document.body.append(modal);
+
   document.addEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
       evt.preventDefault();
@@ -16,53 +18,17 @@ const onPopupEscKeydown = (modal) => {
     }
   });
 };
-// функция удаления обработчика на ESC
-const offPopupEscKeydown = (modal) => {
+
+//функция скрытия модали с автозакрытием
+const getPopupCloseTimeout = (modal) => {
+
   document.removeEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
       evt.preventDefault();
       modal.remove();
     }
   });
-};
-// функция добавления обработчика на клик по области
-const onPopupClickDown = (modal) => {
-  document.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    modal.remove();
-  });
-};
-// функция добавления удаления обработчика на клик по области
-const offPopupClickDown = (modal) => {
-  document.removeEventListener('click', (evt) => {
-    evt.preventDefault();
-    modal.remove();
-  });
-};
-// функция добавления обработчика на кнопку
-const onPopupButtonClick = (modal, button) => {
-  button.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    modal.remove();
-  });
-};
-// функция удаления обработчика на кнопку
-const offPopupButtonClick = (modal, button) => {
-  button.removeEventListener('click', (evt) => {
-    evt.preventDefault();
-    modal.remove();
-  });
-};
 
-//функция показа модали с автозакрытием
-const getPopupShowTimeout = (modal) => {
-  document.body.append(modal);
-  onPopupEscKeydown(modal);
-};
-
-//функция скрытия модали с автозакрытием
-const getPopupCloseTimeout = (modal) => {
-  offPopupEscKeydown(modal);
   setTimeout(() => {
     modal.remove();
   }, POPUP_SHOW_TIME);
@@ -71,24 +37,52 @@ const getPopupCloseTimeout = (modal) => {
 //функция показа модалки без автозакрытия
 const getPopupShow = (modal, button) => {
   document.body.append(modal);
-  onPopupButtonClick(modal, button);
-  onPopupEscKeydown(modal);
-  onPopupClickDown(modal);
+
+  button.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      modal.remove();
+    }
+  });
+
+  document.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
 };
 
-// функция удаления модалки без автозакрытия
-const getPopupClose = (modal, button) => {
-  offPopupButtonClick(modal, button);
-  offPopupEscKeydown(modal);
-  offPopupClickDown(modal);
+const popupEscClose = (modal) => {
+  modal.remove();
+
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      modal.remove();
+    }
+  });
 };
 
+const popupClickClose = (modal) => {
+  modal.remove();
+
+  document.removeEventListener('click', (evt) => {
+    evt.preventDefault();
+    modal.remove();
+  });
+};
 
 export{
   getPopupShowTimeout,
   getPopupCloseTimeout,
   getPopupShow,
-  getPopupClose,
+  popupEscClose,
+  popupClickClose,
+  isEscEvent,
   setFormAddress
 };
 
