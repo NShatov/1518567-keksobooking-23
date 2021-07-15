@@ -1,14 +1,13 @@
 import {housingType} from './card.js';
+import {setFormAddress} from './util.js';
+import {addressTokio, mainPinMarker} from './map.js';
 import {
   getPopupShowTimeout,
-  getPopupCloseTimeout,
   getPopupShow,
-  setFormAddress,
-  popupEscClose,
-  popupClickClose,
-  isEscEvent
-} from './util.js';
-import {addressTokio, mainPinMarker} from './map.js';
+  successForm,
+  errorForm,
+  buttonCloseErrorForm
+} from './modal.js';
 
 // элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
@@ -17,13 +16,6 @@ const mapFiltersForm = document.querySelector('.map__filters'); // найдем 
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
 const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найдем область с кнопка-фичами
 const resetForm = form.querySelector('.ad-form__reset'); // кнопка очистки формы
-// сообщения об успешной отправке и ошибках
-const successForm = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-const errorForm = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-const errorServer = document.querySelector('#error-response').content.querySelector('.error').cloneNode(true);
-// кнопки закрытия модалок
-const buttonCloseErrorForm = errorForm.querySelector('.error__button');
-const buttonCloseErrorServer = errorServer.querySelector('.error__button');
 
 // создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
@@ -50,10 +42,10 @@ const formTitle = form.querySelector('#title'); // заголовок формы
 const formPrice = form.querySelector('#price'); // поле с ценой
 const formRooms = form.querySelector('#room_number'); // поле с комнатами
 const formCapacity = form.querySelector('#capacity'); // поле с гостями
-const formHouseType = form.querySelector('#type');
-const formTimeIn = form.querySelector('#timein');
-const formTimeOut = form.querySelector('#timeout');
-const formAddress = form.querySelector('#address');
+const formHouseType = form.querySelector('#type'); // тип жилья
+const formTimeIn = form.querySelector('#timein'); // время заезда
+const formTimeOut = form.querySelector('#timeout'); // время выезда
+const formAddress = form.querySelector('#address'); // поле адреса
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -116,6 +108,7 @@ formPrice.addEventListener('input', () => {
   }
   formPrice.reportValidity();
 });
+
 // сопоставление данных из полей Кол-во комнат и кол-во мест
 const optionsPriceMapping = {
   1: [1],
@@ -205,7 +198,6 @@ const setUserFormSubmit = () => {
         if (response.ok) {
           getResetForm();
           getPopupShowTimeout(successForm);
-          getPopupCloseTimeout(successForm);
         } else {
           getPopupShow(errorForm, buttonCloseErrorForm);
         }
@@ -216,16 +208,6 @@ const setUserFormSubmit = () => {
   });
 };
 
-errorForm.addEventListener('keydown', (evt) => {
-  if (isEscEvent(evt)){
-    popupEscClose(errorForm);
-  }
-});
-
-errorForm.addEventListener('click', () => {
-  popupClickClose(errorForm);
-});
-
 getResetButtonForm();
 setUserFormSubmit();
 getInactiveForm(true); // установим форму в неактивное состояние
@@ -233,7 +215,5 @@ getInactiveForm(true); // установим форму в неактивное 
 export {
   getInactiveForm,
   formAddress,
-  setUserFormSubmit,
-  errorServer,
-  buttonCloseErrorServer
+  setUserFormSubmit
 };
