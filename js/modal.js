@@ -10,35 +10,36 @@ const buttonCloseErrorServer = errorServer.querySelector('.error__button');
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-const onPopupEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    evt.preventDefault();
-    successForm.remove();
-    errorForm.remove();
-    errorServer.remove();
-    document.removeEventListener('keydown', onPopupEscKeydown);
-  }
-};
-
-const onPopupClickDown = (evt) => {
+function getRemoveListener(evt) {
   evt.preventDefault();
   successForm.remove();
   errorForm.remove();
   errorServer.remove();
+  document.removeEventListener('keydown', onPopupEscKeydown);
   document.removeEventListener('click', onPopupClickDown);
-};
+}
+
+function onPopupEscKeydown(evt) {
+  if (isEscEvent(evt)) {
+    getRemoveListener(evt);
+  }
+}
+
+function onPopupClickDown(evt) {
+  getRemoveListener(evt);
+}
 
 //функция показа модали с автозакрытием
-const getPopupShowTimeout = (modal) => {
+function getPopupShowTimeout(modal) {
   document.body.append(modal);
   document.addEventListener('keydown', onPopupEscKeydown);
   setTimeout(() => {
     modal.remove();
   }, POPUP_SHOW_TIME);
-};
+}
 
 //функция показа модалки без автозакрытия
-const getPopupShow = (modal, button) => {
+function getPopupShow(modal, button) {
   document.body.append(modal);
 
   button.addEventListener('click', (evt) => {
@@ -47,7 +48,7 @@ const getPopupShow = (modal, button) => {
   });
   document.addEventListener('keydown', onPopupEscKeydown);
   document.addEventListener('click', onPopupClickDown);
-};
+}
 
 export {
   getPopupShowTimeout,
