@@ -1,16 +1,23 @@
 import {housingType} from './card.js';
+import {setFormAddress} from './util.js';
+import {addressTokio, mainPinMarker} from './map.js';
+import {
+  getPopupShowTimeout,
+  getPopupShow,
+  successForm,
+  errorForm,
+  buttonCloseErrorForm
+} from './modal.js';
 
+// элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
-
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
-
 const mapFiltersForm = document.querySelector('.map__filters'); // найдем форму с фильтрами
-
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
-
 const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найдем область с кнопка-фичами
+const resetForm = form.querySelector('.ad-form__reset'); // кнопка очистки формы
 
-// создадим функцию для перевода страницы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
+// создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
 const getInactiveForm = (inactive) => {
   //добавим атрибут disabled через перебор
   formFieldsets.forEach((item) => {
@@ -30,17 +37,15 @@ const getInactiveForm = (inactive) => {
   }
 };
 
-getInactiveForm(false);
-
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
 const formPrice = form.querySelector('#price'); // поле с ценой
 const formRooms = form.querySelector('#room_number'); // поле с комнатами
 const formCapacity = form.querySelector('#capacity'); // поле с гостями
-const formHouseType = form.querySelector('#type');
-const formTimeIn = form.querySelector('#timein');
-const formTimeOut = form.querySelector('#timeout');
-const formAddress = form.querySelector('#address');
+const formHouseType = form.querySelector('#type'); // тип жилья
+const formTimeIn = form.querySelector('#timein'); // время заезда
+const formTimeOut = form.querySelector('#timeout'); // время выезда
+const formAddress = form.querySelector('#address'); // поле адреса
 
 // зададим максимальные и минимальные значения полей формы
 const MIN_TITLE_LENGTH = 30;
@@ -103,6 +108,7 @@ formPrice.addEventListener('input', () => {
   }
   formPrice.reportValidity();
 });
+
 // сопоставление данных из полей Кол-во комнат и кол-во мест
 const optionsPriceMapping = {
   1: [1],
@@ -159,7 +165,55 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
+//функция сброса формы в исходное состояние
+const getResetForm = () => {
+  form.reset();
+  setFormAddress(formAddress, addressTokio);
+  mainPinMarker.setLatLng(addressTokio);
+};
+
+//повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
+const getResetButtonForm = () => {
+  resetForm.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    getResetForm();
+  });
+};
+
+// вешаем обработчик события на кнопку отправки формы на сервер
+const setUserFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    fetch (
+      'https://23.javascript.pages.academy/keksobooking ',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
+      .then((response) => {
+        if (response.ok) {
+          getResetForm();
+          getPopupShowTimeout(successForm);
+        } else {
+          getPopupShow(errorForm, buttonCloseErrorForm);
+        }
+      })
+      .catch(() => {
+        getPopupShow(errorForm, buttonCloseErrorForm);
+      });
+  });
+};
+
+getResetButtonForm();
+setUserFormSubmit();
+getInactiveForm(true); // установим форму в неактивное состояние
+
 export {
   getInactiveForm,
-  formAddress
+  formAddress,
+  setUserFormSubmit
 };

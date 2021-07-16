@@ -1,11 +1,6 @@
-import {
-  getInactiveForm,
-  formAddress
-} from './form.js';
-
-import {similarData} from './object.js';
-
 import {getCreateCard} from './card.js';
+import {formAddress, getInactiveForm} from './form.js';
+import {setFormAddress} from './util.js';
 
 const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
@@ -15,8 +10,8 @@ const addressTokio = {
   lat: MARKER_LAT,
   lng: MARKER_LNG,
 };
-// установим начальное значение в поле адреса
-formAddress.value = Object.values(addressTokio).join(', ');
+// устновим начальные данные в поле адреса формы
+setFormAddress(formAddress, addressTokio);
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -41,6 +36,7 @@ const mainPinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
+
 // создадим метку - центр Токио
 const mainPinMarker = L.marker(
   {
@@ -55,7 +51,6 @@ const mainPinMarker = L.marker(
 
 // добавим метку на карту
 mainPinMarker.addTo(map);
-// выведем в консоль новые координаты, когда пользователь отпустит маркер
 mainPinMarker.on('moveend', (evt) => {
   const address = evt.target.getLatLng();
   const lat = address.lat.toFixed(5);
@@ -91,5 +86,9 @@ const getMarkerMap = (card) => {
       );
   });
 };
-getMarkerMap(similarData);
 
+export {
+  getMarkerMap,
+  addressTokio,
+  mainPinMarker
+};
