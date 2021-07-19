@@ -1,6 +1,7 @@
 import {housingType} from './card.js';
 import {setFormAddress} from './util.js';
 import {addressTokio, mainPinMarker} from './map.js';
+import {mapFilters} from './filter.js';
 import {
   getPopupShowTimeout,
   getPopupShow,
@@ -168,6 +169,7 @@ formRooms.addEventListener('change', () => {
 //функция сброса формы в исходное состояние
 const getResetForm = () => {
   form.reset();
+  mapFilters.reset();
   setFormAddress(formAddress, addressTokio);
   mainPinMarker.setLatLng(addressTokio);
 };
