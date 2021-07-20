@@ -1,7 +1,7 @@
 import {housingType} from './card.js';
 import {setFormAddress} from './util.js';
 import {addressTokio, mainPinMarker} from './map.js';
-import {mapFilters} from './filter.js';
+import {mapFiltersForm, mapFilterHouseFeatures} from './filter.js';
 import {
   getPopupShowTimeout,
   getPopupShow,
@@ -13,9 +13,7 @@ import {
 // элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
-const mapFiltersForm = document.querySelector('.map__filters'); // найдем форму с фильтрами
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
-const mapFeatures = mapFiltersForm.querySelector('.map__features'); // найдем область с кнопка-фичами
 const resetForm = form.querySelector('.ad-form__reset'); // кнопка очистки формы
 
 // создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
@@ -24,16 +22,22 @@ const getInactiveForm = (inactive) => {
   formFieldsets.forEach((item) => {
     item.disabled = inactive;
   });
+  if (inactive) {
+    form.classList.add('ad-form--disabled');
+  } else {
+    form.classList.remove('ad-form--disabled');
+  }
+};
+
+const getInactiveFilter = (inactive) => {
   // пепеберем коллекцию и установим атрибут diabled на элементы
   mapFiltersSelects.forEach((item) => {
     item.disabled = inactive;
   });
-  mapFeatures.disabled = inactive; // установим атрибут disabled на блоке с кнопками-фичами
+  mapFilterHouseFeatures.disabled = inactive; // установим атрибут disabled на блоке с кнопками-фичами
   if (inactive) {
-    form.classList.add('ad-form--disabled');
     mapFiltersForm.classList.add('map__filters--disabled'); // повесим класс блокировки
   } else {
-    form.classList.remove('ad-form--disabled');
     mapFiltersForm.classList.remove('map__filters--disabled');
   }
 };
@@ -168,8 +172,8 @@ formRooms.addEventListener('change', () => {
 
 //функция сброса формы в исходное состояние
 const getResetForm = () => {
-  form.reset();
-  mapFilters.reset();
+  form.reset(); // сбросим заполненную форму
+  mapFiltersForm.reset(); // сбросим форму с фильтрами
   setFormAddress(formAddress, addressTokio);
   mainPinMarker.setLatLng(addressTokio);
 };
@@ -213,9 +217,11 @@ const setUserFormSubmit = () => {
 getResetButtonForm();
 setUserFormSubmit();
 getInactiveForm(true); // установим форму в неактивное состояние
+getInactiveFilter(true); // установим форму с фильтрми в неактивное состояние
 
 export {
   getInactiveForm,
+  getInactiveFilter,
   formAddress,
   setUserFormSubmit
 };

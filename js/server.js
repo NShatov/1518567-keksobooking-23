@@ -1,19 +1,16 @@
-// модуль для работы с сервером
-import {getMarkerMap} from './map.js';
-import {
-  getPopupShow,
-  errorServer,
-  buttonCloseErrorServer
-} from './modal.js';
+// модуль для получения данных с сервера
 
-const DATA_COUNT = 10;
+const getData = (onSuccess, onFail) => {
+  fetch('https://23.javascript.pages.academy/keksobooking/data')
+    .then((response) => response.json())
+    .then ((ads) => {
+      onSuccess(ads);
+    })
+    .catch(() => {
+      onFail('Ошибка загрузки');
+    });
+};
+
+export {getData};
 
 
-fetch('https://23.javascript.pages.academy/keksobooking/data')
-  .then((response) => response.json())
-  .then ((ads) => {
-    getMarkerMap(ads.slice(0, DATA_COUNT));
-  })
-  .catch(() => {
-    getPopupShow(errorServer, buttonCloseErrorServer);
-  });
