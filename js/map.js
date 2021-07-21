@@ -1,9 +1,11 @@
 import {getCreateCard} from './card.js';
-import {formAddress, getInactiveForm} from './form.js';
+import {formAddress} from './form.js';
+import {filter} from './filter.js';
 import {setFormAddress} from './util.js';
 
 const MARKER_LAT = 35.6894;
 const MARKER_LNG = 139.69235;
+const COUNT = 10;
 const ZOOM = 10;
 
 const addressTokio = {
@@ -13,29 +15,12 @@ const addressTokio = {
 // устновим начальные данные в поле адреса формы
 setFormAddress(formAddress, addressTokio);
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    getInactiveForm(false);
-  })
-  .setView({
-    lat: MARKER_LAT,
-    lng: MARKER_LNG,
-  }, ZOOM);
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
-
 // создадим иконку для маркера
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
-
 
 // создадим метку - центр Токио
 const mainPinMarker = L.marker(
@@ -48,9 +33,29 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+const markerGroup = L.layerGroup();
 
-// добавим метку на карту
-mainPinMarker.addTo(map);
+const createMap = (onLoadCallback) => {
+  const map = L.map('map-canvas')
+    .on('load', () => {
+      onLoadCallback();
+    })
+    .setView({
+      lat: MARKER_LAT,
+      lng: MARKER_LNG,
+    }, ZOOM);
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+
+  markerGroup.addTo(map);
+  mainPinMarker.addTo(map);// добавим метку на карту
+};
+
 mainPinMarker.on('moveend', (evt) => {
   const address = evt.target.getLatLng();
   const lat = address.lat.toFixed(5);
@@ -59,8 +64,10 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 //выведем метки объявлений на карту
-const getMarkerMap = (card) => {
-  card.forEach(({location, offer, author}) => {
+const getMarkerMap = (arr) => {
+  markerGroup.clearLayers();
+  const ads = filter(arr, COUNT);
+  ads.forEach(({location, offer, author}) => {
     const lat = location.lat;
     const lng = location.lng;
     const icon = L.icon({
@@ -77,7 +84,7 @@ const getMarkerMap = (card) => {
     },
     );
     marker
-      .addTo(map)
+      .addTo(markerGroup)
       .bindPopup(
         (getCreateCard({offer, author})),
         {
@@ -90,5 +97,6 @@ const getMarkerMap = (card) => {
 export {
   getMarkerMap,
   addressTokio,
-  mainPinMarker
+  mainPinMarker,
+  createMap
 };
