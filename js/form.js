@@ -1,46 +1,21 @@
 import {housingType} from './card.js';
-import {setFormAddress} from './util.js';
-import {addressTokio, mainPinMarker} from './map.js';
-import {mapFiltersForm, mapFilterHouseFeatures} from './filter.js';
+import {mapFiltersForm} from './filter.js';
+import {setUserFormSubmit} from './server.js';
 import {
-  getPopupShowTimeout,
-  getPopupShow,
-  successForm,
-  errorForm,
-  buttonCloseErrorForm
-} from './modal.js';
+  getInactiveForm,
+  getInactiveFilter,
+  getMatchingSelect,
+  getOptionSelect,
+  optionsPriceMapping,
+  getMatchingTime,
+  getResetForm
+} from './form-util.js';
 
 // элементы формы
 const form = document.querySelector('.ad-form'); // найдем форму заполнения информации об объявлении
 const formFieldsets = form.querySelectorAll('fieldset'); // найдем филдсеты внутри формы
 const mapFiltersSelects = mapFiltersForm.querySelectorAll('select'); // найдем селекты внутри фильтра
 const resetForm = form.querySelector('.ad-form__reset'); // кнопка очистки формы
-
-// создадим функцию для перевода формы в неактивное и активное состояние с помощью флага inactive - 'неактивное'
-const getInactiveForm = (inactive) => {
-  //добавим атрибут disabled через перебор
-  formFieldsets.forEach((item) => {
-    item.disabled = inactive;
-  });
-  if (inactive) {
-    form.classList.add('ad-form--disabled');
-  } else {
-    form.classList.remove('ad-form--disabled');
-  }
-};
-
-const getInactiveFilter = (inactive) => {
-  // пепеберем коллекцию и установим атрибут diabled на элементы
-  mapFiltersSelects.forEach((item) => {
-    item.disabled = inactive;
-  });
-  mapFilterHouseFeatures.disabled = inactive; // установим атрибут disabled на блоке с кнопками-фичами
-  if (inactive) {
-    mapFiltersForm.classList.add('map__filters--disabled'); // повесим класс блокировки
-  } else {
-    mapFiltersForm.classList.remove('map__filters--disabled');
-  }
-};
 
 // валидация формы
 const formTitle = form.querySelector('#title'); // заголовок формы
@@ -114,45 +89,6 @@ formPrice.addEventListener('input', () => {
   formPrice.reportValidity();
 });
 
-// сопоставление данных из полей Кол-во комнат и кол-во мест
-const optionsPriceMapping = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0],
-};
-
-// напишем функцию сопастовления данных из одного селекта в другой
-const getMatchingSelect = function (select1, select2, mapping) {
-  const value = +select1.value;
-  const options = select2.options;
-  const optionsLength = options.length;
-  const availableOptions = mapping[value];
-
-  for (let index = 0; index < optionsLength; index++) {
-    if (availableOptions.indexOf(+options[index].value) !== -1) {
-      options[index].disabled = false;
-      if (+options[index].value === value || availableOptions.length === 1) {
-        options[index].selected = true;
-      }
-    } else {
-      options[index].disabled = true;
-    }
-  }
-};
-
-// функция сопастовления данных селекта и инпута
-const getOptionSelect = function(select, input, mapping) {
-  const selectValue = select.value;
-  const price = mapping[selectValue].price;
-  input.placeholder = price;
-  input.min = price;
-};
-
-// функция для сопастовления выбора времени заезда и выезда
-const getMatchingTime = function(select1, select2) {
-  select2.value = select1.value;
-};
 
 formTimeIn.addEventListener('change', () => {
   getMatchingTime(formTimeIn, formTimeOut);
@@ -170,13 +106,6 @@ formRooms.addEventListener('change', () => {
   getMatchingSelect(formRooms, formCapacity, optionsPriceMapping);
 });
 
-//функция сброса формы в исходное состояние
-const getResetForm = () => {
-  form.reset(); // сбросим заполненную форму
-  mapFiltersForm.reset(); // сбросим форму с фильтрами
-  setFormAddress(formAddress, addressTokio);
-  mainPinMarker.setLatLng(addressTokio);
-};
 
 //повесим обработчик событий на кнопку очистки полей формы и возврата метки в начальное значение
 const getResetButtonForm = () => {
@@ -186,33 +115,6 @@ const getResetButtonForm = () => {
   });
 };
 
-// вешаем обработчик события на кнопку отправки формы на сервер
-const setUserFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    const formData = new FormData(evt.target);
-
-    fetch (
-      'https://23.javascript.pages.academy/keksobooking ',
-      {
-        method: 'POST',
-        body: formData,
-      },
-    )
-      .then((response) => {
-        if (response.ok) {
-          getResetForm();
-          getPopupShowTimeout(successForm);
-        } else {
-          getPopupShow(errorForm, buttonCloseErrorForm);
-        }
-      })
-      .catch(() => {
-        getPopupShow(errorForm, buttonCloseErrorForm);
-      });
-  });
-};
 
 getResetButtonForm();
 setUserFormSubmit();
@@ -223,5 +125,9 @@ export {
   getInactiveForm,
   getInactiveFilter,
   formAddress,
-  setUserFormSubmit
+  setUserFormSubmit,
+  form,
+  formFieldsets,
+  mapFiltersSelects,
+  mapFiltersForm
 };
