@@ -115,7 +115,6 @@ const getResetButtonForm = () => {
   });
 };
 
-
 getResetButtonForm();
 setUserFormSubmit();
 getInactiveForm(true); // установим форму в неактивное состояние
